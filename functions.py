@@ -5,6 +5,23 @@ def relu(x):
     return np.maximum(x, 0)
 
 
+def tanh(x):
+    return np.tanh(x)
+
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+
+def softmax(x):
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum(axis=0)
+
+
+def fully_connected(input_data, weights, biases):
+    return np.dot(input_data, weights) + biases
+
+
 def max_pooling(input_data, pool_size):
     input_height, input_width = input_data.shape
     pool_height, pool_width = pool_size
@@ -18,7 +35,7 @@ def max_pooling(input_data, pool_size):
     return output
 
 
-def avg_pool(input, pool_size, stride):
+def avg_pooling(input, pool_size, stride):
     in_h, in_w = input.shape
     out_size = (in_h - pool_size) // stride + 1
     out = np.zeros((out_size, out_size))
@@ -33,7 +50,7 @@ def avg_pool(input, pool_size, stride):
     return out
 
 
-def convol(input, kernel, stride, padding):
+def convolution(input, kernel, stride, padding):
     in_h, in_w = input.shape
     k_h, k_w = kernel.shape
     out_size = (in_h - k_h + 2 * padding) // stride + 1
@@ -42,19 +59,3 @@ def convol(input, kernel, stride, padding):
         for j in range(out_size):
             out[i, j] = np.sum(input[i:i + k_h, j:j + k_w] * kernel)
     return out
-
-
-input_data = np.array([[1, 2, 0, 1],
-                       [0, 1, 2, 3],
-                       [3, 0, 1, 2],
-                       [2, 1, 0, 1]])
-kernel = np.array([[1, 0],
-                   [0, 1]])
-
-conv_output = convol(input_data, kernel, 1, 0)
-conv_output_relu = relu(conv_output)
-pool_output = avg_pool(conv_output_relu, 2, 1)
-
-print(conv_output)
-print(conv_output_relu)
-print(pool_output)
